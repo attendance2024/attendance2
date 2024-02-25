@@ -6,26 +6,34 @@ def index(request):
     return HttpResponse("Hello World")
 
 def college(request):
-    forms = studentform()
-    return render(request,'student/index.html',{'form':forms})  
+    return render(request,'student/index.html')  
 
 def StudentLogin(request):
-    return render(request,'student/student.html') 
+    if request.method == "POST":
+        form = studentform(request.POST)
+        if form.is_valid():
+            form.save()
+    forms = studentform()
+    return render(request,'student/student.html',{'form':forms}) 
 
 def home(request):
     return render(request,'student/home.html')
 
 def teacher(request):
-    return render(request,'student/teacher.html')
+    forms = teacherform()
+    return render(request,'student/teacher.html',{'form':forms})
 
 def tutor(request):
-    return render(request,'student/tutor.html')  
+    forms = studentform()
+    return render(request,'student/tutor.html',{'form':forms})  
 
 def hod(request):
-    return render(request,'student/hod.html')  
+    forms = hodform()
+    return render(request,'student/hod.html',{'form':forms})  
 
 def principal(request):
-    return render(request,'student/principle.html')
+    forms = principalform()
+    return render(request,'student/principle.html',{'form':forms})
 
 def contact(request):
     return render(request,'student/contact.html')    

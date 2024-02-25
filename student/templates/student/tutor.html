@@ -5,5 +5,13 @@ tutor
 {% endblock %}
 
 {% block second %}
-<h1>Hello Tutor</h1>
+<div class="container">
+        <h1 class="mt-5">Tutor Details</h1>
+        <form class="mt-3">
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
+    </div>
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
