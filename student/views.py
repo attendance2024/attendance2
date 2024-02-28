@@ -31,9 +31,5 @@ def hod(request):
     forms = hodform()
     return render(request,'student/hod.html',{'form':forms})  
 
-def principal(request):
-    forms = principalform()
-    return render(request,'student/principle.html',{'form':forms})
-
 def contact(request):
     return render(request,'student/contact.html')    

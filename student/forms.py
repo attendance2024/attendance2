@@ -36,7 +36,3 @@ class hodform(forms.ModelForm):
     class Meta:
         model = hod
         fields = '__all__'
-class principalform(forms.ModelForm):
-    class Meta:
-        model = principal
-        fields = '__all__'
