@@ -5,6 +5,6 @@ from . import views
 
 urlpatterns = [
     path('login/', views.login_view, name='login'),
-    path('login/',views.logout_view, name='logout')
+    path('logout/',views.logout_view, name='logout')
     # Add other authentication-related URLs here (e.g., registration, logout)
 ]
