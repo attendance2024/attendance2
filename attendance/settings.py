@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'hod',
     'tutor',
     'principal',
-    'authenticate'
+    'authenticate',
 ]
 
 MIDDLEWARE = [

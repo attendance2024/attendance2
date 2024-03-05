@@ -158,7 +158,7 @@ button:hover {
     <section>
         <h1>Login</h1>
         <center><p class="error">{{ error }}</p></center>
-        <form method="post">
+        <form method="POST">
             {% csrf_token %}
             {% for field in form %}
             <div class="inputbox {% if field.errors %}errors{% endif %}">
