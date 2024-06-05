@@ -7,3 +7,6 @@ admin.site.register(tutor)
 admin.site.register(event)
 admin.site.register(teacher)
 admin.site.register(hod)
+admin.site.register(addattendance)
+
+

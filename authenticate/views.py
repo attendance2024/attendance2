@@ -22,7 +22,7 @@ def login_view(request):
                 login(request, user)
                 # Redirect users based on their group membership
                 if Group.objects.get(name='student1') in user.groups.all():
-                    return redirect('student1')
+                    return redirect('student')
                 elif Group.objects.get(name='teacher') in user.groups.all():
                     return redirect('teacher')
                 elif Group.objects.get(name='hod') in user.groups.all():

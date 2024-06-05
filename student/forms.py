@@ -36,3 +36,12 @@ class hodform(forms.ModelForm):
     class Meta:
         model = hod
         fields = '__all__'
+
+class addform(forms.ModelForm):
+    class Meta:
+        model = addattendance
+        fields = '__all__'    
+        fields = [
+             'student_name', 'student_class', 'roll_no', 'event',
+            
+        ]  

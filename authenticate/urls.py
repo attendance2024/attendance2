@@ -8,3 +8,9 @@ urlpatterns = [
     path('logout/',views.logout_view, name='logout')
     # Add other authentication-related URLs here (e.g., registration, logout)
 ]
+
+
+
+
+
+

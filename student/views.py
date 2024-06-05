@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from .models import addattendance
 from django.http import HttpResponse
 from .forms import *
 # Create your views here.
-def index(request):
-    return HttpResponse("Hello World")
+
 
 def college(request):
     return render(request,'student/index.html')  
@@ -19,17 +19,17 @@ def StudentLogin(request):
 def home(request):
     return render(request,'student/home.html')
 
-def teacher(request):
-    forms = teacherform()
-    return render(request,'student/teacher.html',{'form':forms})
-
-def tutor(request):
-    forms = studentform()
-    return render(request,'student/tutor.html',{'form':forms})  
-
-def hod(request):
-    forms = hodform()
-    return render(request,'student/hod.html',{'form':forms})  
-
-def contact(request):
-    return render(request,'student/contact.html')    
+def add_attendance(request):
+    if request.method == 'POST':
+        form = addform(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('success') 
+    else:
+        form = addform()
+    return render(request, 'student/add_attendance.html', {'form': form})
+def view_attendance(request):
+    attendance_records = addattendance.objects.all()
+    return render(request, 'student/view_attendance.html', {'attendance_records': attendance_records})
+def success(request):
+    return render(request,'student/success.html') 
