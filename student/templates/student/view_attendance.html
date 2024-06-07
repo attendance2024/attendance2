@@ -13,17 +13,18 @@
                 <th>Student Name</th>
                 <th>Student Class</th>
                 <th>Roll No</th>
-                <th>
+                <th>Event Name</th>
+                <th>Hours</th>
             </tr>
         </thead>
         <tbody>
             {% for attendance in attendance_records %}
-            <tr>
-                <td>{{ attendance.student_name }}</td>
-                <td>{{ attendance.student_class }}</td>
-                <td>{{ attendance.roll_no }}</td>
-                <!-- Add more table cells for other fields as needed -->
-            </tr>
+                <tr>
+                    <td>{{ attendance.student_name }}</td>
+                    <td>{{ attendance.student_class }}</td>
+                    <td>{{ attendance.roll_no }}</td>
+                    <td>{{ attendance.event_name }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

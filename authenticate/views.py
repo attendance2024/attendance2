@@ -21,7 +21,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 # Redirect users based on their group membership
-                if Group.objects.get(name='student1') in user.groups.all():
+                if Group.objects.get(name='student') in user.groups.all():
                     return redirect('student')
                 elif Group.objects.get(name='teacher') in user.groups.all():
                     return redirect('teacher')

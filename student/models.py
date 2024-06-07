@@ -21,7 +21,15 @@ class student(models.Model):
     program_id = models.IntegerField()
     dept = models.ForeignKey(department,on_delete=models.CASCADE)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
 
+class event(models.Model):
+    event_id = models.AutoField(primary_key=True)
+    event_name = models.CharField(max_length=120)
+    event_date = models.DateField()
+    hour_attended = models.IntegerField()
+    dept = models.ForeignKey(department,on_delete=models.CASCADE)
 class teacher(models.Model):
     teacher_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=120)
@@ -29,6 +37,7 @@ class teacher(models.Model):
     contact_number = models.CharField(max_length=10)
     dept = models.ForeignKey(department,on_delete=models.CASCADE)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    event = models.ForeignKey(event,  on_delete=models.CASCADE)
 class tutor(models.Model):
     tutor_id = models.AutoField(primary_key=True)
     first_name = models.CharField(max_length=120)
@@ -45,12 +54,6 @@ class hod(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
-class event(models.Model):
-    event_id = models.AutoField(primary_key=True)
-    event_name = models.CharField(max_length=120)
-    event_date = models.DateField()
-    hour_attended = models.IntegerField()
-    dept = models.ForeignKey(department,on_delete=models.CASCADE)
 
 class addattendance(models.Model):
     student_name = models.CharField(max_length=100)
@@ -82,12 +85,15 @@ class addattendance(models.Model):
     tutor_recommendation = models.CharField(max_length=100, null=True, blank=True)
     hod_remarks = models.CharField(max_length=100, null=True, blank=True)
     principal_order = models.CharField(max_length=100, null=True, blank=True)
+    uploaded_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def total_hours(self):
         return sum([
             self.hours1, self.hours2, self.hours3, self.hours4, self.hours5,
             self.hours6, self.hours7, self.hours8, self.hours9, self.hours10
         ])
+
+    
 class addform(forms.ModelForm):
     class Meta:
         model = addattendance
