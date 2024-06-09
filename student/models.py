@@ -35,6 +35,8 @@ class extra_curricular_activities(models.Model):
 class event(models.Model):
     ex_id = models.ForeignKey(extra_curricular_activities,on_delete=models.CASCADE)
     event_description = models.CharField(max_length=120)
+    def __str__(self):
+        return self.event_description
 class teacher(models.Model):
     teacher_name = models.CharField(max_length=120)
     dept_id = models.ForeignKey(department,on_delete=models.CASCADE)
@@ -46,6 +48,8 @@ class charge(models.Model):
 
 class status(models.Model):
     status_descr = models.CharField(max_length=120)
+    def __str__(self):
+        return self.status_descr
 class addattendance(models.Model):
     event = models.ForeignKey(event,on_delete=models.CASCADE)
     student = models.ForeignKey(student,on_delete=models.CASCADE)
