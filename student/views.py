@@ -35,7 +35,8 @@ def add_attendance(request):
             return redirect('success') 
     else:
         form = addform()
-    return render(request, 'student/add_attendance.html', {'form': form})
+        stud = student.objects.filter(user=request.user)
+    return render(request, 'student/add_attendance.html', {'form': form,'stud':stud})
 
 @login_required()    
 def view_attendance(request):

@@ -41,7 +41,5 @@ class addform(forms.ModelForm):
     class Meta:
         model = addattendance
         fields = '__all__'    
-        fields = [
-             'student_name', 'student_class', 'roll_no', 'event',
-            
-        ]  
+        
+    

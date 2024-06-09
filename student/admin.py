@@ -7,6 +7,10 @@ admin.site.register(tutor)
 admin.site.register(event)
 admin.site.register(teacher)
 admin.site.register(hod)
+admin.site.register(programme)
+admin.site.register(extra_curricular_activities)
+admin.site.register(charge)
+admin.site.register(status)
 admin.site.register(addattendance)
 
 
