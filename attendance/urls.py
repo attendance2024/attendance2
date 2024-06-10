@@ -27,6 +27,5 @@ urlpatterns = [
     path('tutor/',include('tutor.urls')),
     path('principal/',include('principal.urls')),
     path('',views.home,name="home")
-
 ]
 

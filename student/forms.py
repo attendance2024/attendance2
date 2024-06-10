@@ -40,6 +40,4 @@ class hodform(forms.ModelForm):
 class addform(forms.ModelForm):
     class Meta:
         model = addattendance
-        fields = '__all__'    
-        
-    
+        fields = 'event','date','hour'    

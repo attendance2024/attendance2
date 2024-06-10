@@ -1,120 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Add Attendance</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Add Attendance</h2>
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="card">
-                    <div class="card-body">
-                        <form method="post">
-                            {% csrf_token %}
-                            {{stud.student_name}}
-                            {{ form.as_p }}
-                            <div class="form-group row">
-                                <label for="dates" class="col-sm-3 col-form-label">Date(s) and Hrs of Participation</label>
-                                <div class="col-sm-9">
-                                    <table class="table table-bordered" id="attendanceTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">SL.NO</th>
-                                                <th scope="col">Date</th>
-                                                <th scope="col" class="checkbox-cell">1</th>
-                                                <th scope="col" class="checkbox-cell">2</th>
-                                                <th scope="col" class="checkbox-cell">3</th>
-                                                <th scope="col" class="checkbox-cell">4</th>
-                                                <th scope="col" class="checkbox-cell">5</th>
-                                                <th scope="col">Total No of Hrs</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row">1</th>
-                                                <td><input type="date" class="form-control" name="date_1" /></td>
-                                                <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                                                <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                                                <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                                                <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                                                <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                                                <td><input type="number" class="form-control total-hours" readonly value="0" /></td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="7" class="text-right"><strong>Grand Total</strong></td>
-                                                <td><input type="number" class="form-control" readonly value="0" id="grandTotal" /></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                    <button type="button" class="btn btn-secondary mt-2" id="addRowButton">Add</button>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block mt-3">Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Bootstrap JS (optional) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let rowNumber = 2;
-
-            document.getElementById('addRowButton').addEventListener('click', function() {
-                const table = document.getElementById('attendanceTable').getElementsByTagName('tbody')[0];
-                const newRow = table.insertRow();
-                
-                newRow.innerHTML = `
-                    <th scope="row">${rowNumber}</th>
-                    <td><input type="date" class="form-control" name="date_${rowNumber}" /></td>
-                    <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                    <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                    <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                    <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                    <td class="checkbox-cell"><input type="checkbox" class="form-check-input hour-checkbox" /></td>
-                    <td><input type="number" class="form-control total-hours" readonly value="0" /></td>
-                `;
-                
-                rowNumber++;
-                attachCheckboxListeners();
-            });
-
-            function attachCheckboxListeners() {
-                document.querySelectorAll('.hour-checkbox').forEach(checkbox => {
-                    checkbox.addEventListener('change', calculateTotals);
-                });
-            }
-
-            function calculateTotals() {
-                let grandTotal = 0;
-
-                document.querySelectorAll('#attendanceTable tbody tr').forEach(row => {
-                    let totalHours = 0;
-
-                    row.querySelectorAll('.hour-checkbox').forEach(checkbox => {
-                        if (checkbox.checked) {
-                            totalHours++;
-                        }
-                    });
-
-                    row.querySelector('.total-hours').value = totalHours;
-                    grandTotal += totalHours;
-                });
-
-                document.getElementById('grandTotal').value = grandTotal;
-            }
-
-            attachCheckboxListeners();
-        });
-    </script>
+    <form action="{% url 'add_attendance' %}" method="post">
+        {% csrf_token %}
+    <select name="event">
+    <option>----------------</option>
+    {% for i in eve %}
+    <option value="{{i.event_description}}" >{{i.event_description}}</option>
+    {% endfor %}
+    </select>
+        Date: <input type="date" name="date" ><br>
+        1: <input type="checkbox" name="hour" value="1">
+        2: <input type="checkbox" name="hour" value="2">
+        3: <input type="checkbox" name="hour" value="3">
+        4: <input type="checkbox" name="hour" value="4">
+        5: <input type="checkbox" name="hour" value="5">
+        <br>
+        Total hours: <input type="text" name="totalhours">
+        Submit: <input type="submit" >
+    </form>
 </body>
 </html>

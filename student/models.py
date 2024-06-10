@@ -55,7 +55,8 @@ class addattendance(models.Model):
     student = models.ForeignKey(student,on_delete=models.CASCADE)
     date = models.DateField()
     hour = models.SmallIntegerField(null=True)
-    status_id = models.ForeignKey(status,on_delete=models.CASCADE)
+    totalhour = models.IntegerField(default=1)
+    status_id = models.ForeignKey(status,on_delete=models.CASCADE,null=True)
 
 
 class tutor(models.Model):

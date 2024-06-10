@@ -26,17 +26,29 @@ def home(request):
 
 @login_required()
 def add_attendance(request):
+    context = {
+        'eve': event.objects.all()
+    }
     if request.method == 'POST':
-        form = addform(request.POST)
-        if form.is_valid():
-            attendance=form.save(commit=False)
-            attendance.uploaded_by = request.user
+        evet_description = request.POST.get('event')
+        event_instance = event.objects.get(event_description=evet_description)
+        student_instance = student.objects.get(user=request.user)
+        date = request.POST.get('date')
+        hours = request.POST.getlist('hour')
+        totalhour = request.POST.get('totalhours')
+        
+        for hour in hours:
+            attendance = addattendance(
+                event=event_instance,
+                student=student_instance,
+                date=date,
+                hour=hour,
+                totalhour=totalhour
+            )
             attendance.save()
-            return redirect('success') 
-    else:
-        form = addform()
-        stud = student.objects.filter(user=request.user)
-    return render(request, 'student/add_attendance.html', {'form': form,'stud':stud})
+        return redirect('success')
+    
+    return render(request, 'student/add_attendance.html', context)
 
 @login_required()    
 def view_attendance(request):

@@ -4,6 +4,81 @@ from django.http import HttpResponse
 from .models import editattendance
 from .forms import *
 from student import models as studentmodel
+from student.models import teacher, charge 
+
+@login_required
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            
+            if user.is_principal:
+                return redirect('principal_dashboard')
+            elif user.is_hod:
+                return redirect('hod_dashboard')
+            elif user.is_teacher:
+                return redirect('teacher_dashboard')
+            elif user.is_tutor:
+                return redirect('tutor_dashboard')    
+            else:
+                return redirect('student_dashboard')
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    
+    return render(request, 'login.html')
+
+def principal_dashboard(request):
+    return HttpResponse("Principal Dashboard")
+
+def hod_dashboard(request):
+    return HttpResponse("HOD Dashboard")
+
+def teacher_dashboard(request):
+    teacher = Teacher.objects.get(user=request.user)
+    charges = Charge.objects.filter(teacher=teacher)
+    context = {'charges': charges}
+    return render(request, 'teacher_dashboard.html', context)
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            
+            if user.is_principal:
+                return redirect('principal_dashboard')
+            elif user.is_hod:
+                return redirect('hod_dashboard')
+            elif user.is_teacher:
+                return redirect('teacher_dashboard')
+            else:
+                return redirect('student_dashboard')
+        else:
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
+    
+    return render(request, 'login.html')
+
+def principal_dashboard(request):
+    return HttpResponse("Principal Dashboard")
+
+def hod_dashboard(request):
+    return HttpResponse("HOD Dashboard")
+
+def teacher_dashboard(request):
+    teacher = teacher.objects.get(user=request.user)
+    charges = charge.objects.filter(teacher=teacher)
+    context = {'charges': charges}
+    return render(request, 'teacher_dashboard.html', context)
+
+def student_dashboard(request):
+    return HttpResponse("Student Dashboard")
 
 @login_required
 def teacher(request):
