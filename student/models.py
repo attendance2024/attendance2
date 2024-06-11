@@ -40,6 +40,7 @@ class event(models.Model):
 class teacher(models.Model):
     teacher_name = models.CharField(max_length=120)
     dept_id = models.ForeignKey(department,on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return self.teacher_name
 class charge(models.Model):

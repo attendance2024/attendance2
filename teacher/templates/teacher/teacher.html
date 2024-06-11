@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard</title>
+    <title>Teacher Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -44,6 +44,18 @@
     <div class="container mt-5 text-center">
         <a href="{% url 'view_attendance' %}" class="btn btn-secondary btn-custom">View Attendance</a><br>
         <a href="{% url 'edit_attendance' %}" class="btn btn-primary btn-custom">Edit Attendance</a><br>
+        {% if hod %}
+            <a href="" class="btn btn-primary btn-custom">{{ hod.dept_id }}</a><br>
+        {% endif %}
+        {% if charge %}
+            <a href="" class="btn btn-primary btn-custom">{{ charge.ex_id }}</a><br>
+        {% endif %}
+        {% if tutor %}
+            <a href="" class="btn btn-primary btn-custom">{{ tutor.pgm_id }} SEM {{ tutor.sem }}</a><br>
+        {% endif %}
+        {% if principal %}
+            <a href="" class="btn btn-primary btn-custom">Principal</a><br>
+        {% endif %}
         <a href="{% url 'logout' %}" class="btn btn-danger btn-custom">Logout</a>
     </div>
 

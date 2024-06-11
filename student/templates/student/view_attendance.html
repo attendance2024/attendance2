@@ -10,23 +10,25 @@
     <table border=1>
         <thead>
             <tr>
-                <th>Attendance ID</th>
+              
                 <th>Student ID</th>
                 <th>Event</th>
                 <th>Date</th>
                 <th>Hour</th>
-                <th>Total Hours</th>
+                <th>Status<th>
+              
             </tr>
         </thead>
         <tbody>
             {% for attendance in attendance_records %}
                 <tr>
-                    <td>{{ attendance.id }}</td>
+                  
                     <td>{{ attendance.student_id }}</td>
                     <td>{{ attendance.event }}</td>
                     <td>{{ attendance.date }}</td>
                     <td>{{ attendance.hour }}</td>
-                    <td>{{ attendance.totalhour }}</td>
+                 
+                 
                 </tr>
             {% endfor %}
          </tbody> 

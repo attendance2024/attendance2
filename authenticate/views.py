@@ -25,12 +25,12 @@ def login_view(request):
                     return redirect('student')
                 elif Group.objects.get(name='teacher') in user.groups.all():
                     return redirect('teacher')
-                elif Group.objects.get(name='hod') in user.groups.all():
-                    return redirect('hod')
-                elif Group.objects.get(name='tutor') in user.groups.all():
-                    return redirect('tutor')
-                elif Group.objects.get(name='principal') in user.groups.all():
-                    return redirect('principal')
+                # elif Group.objects.get(name='hod') in user.groups.all():
+                #     return redirect('hod')
+                # elif Group.objects.get(name='tutor') in user.groups.all():
+                #     return redirect('tutor')
+                # elif Group.objects.get(name='principal') in user.groups.all():
+                #     return redirect('principal')
         else:
             return render(request, 'authenticate/login.html', {'form': form, 'error': 'Invalid username or password'})
     return render(request, 'authenticate/login.html', {'form': form})

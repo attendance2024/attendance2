@@ -10,10 +10,36 @@ from student import models as studentmodel
 
 @login_required
 def teacher(request):
-    return render(request, 'teacher/teacher.html')
-@login_required
-def home(request):
-    return render(request,'teacher/teacher.html')
+    context = {}
+    try:
+        teacher = studentmodel.teacher.objects.get(user=request.user)
+        if studentmodel.charge.objects.filter(teacher_id=teacher).exists():
+            charge = studentmodel.charge.objects.filter(teacher_id=teacher).first()
+            context.update({'charge':charge})
+
+        if studentmodel.hod.objects.filter(teacher_id=teacher).exists():
+            dept = studentmodel.hod.objects.filter(teacher_id=teacher).first()
+            context.update({'hod':dept})
+
+        if studentmodel.tutor.objects.filter(teacher_id=teacher).exists():
+            tutor_class = studentmodel.tutor.objects.filter(teacher_id=teacher).first()
+            context.update({'tutor':tutor_class})
+
+        if Group.objects.get(name='principal') in request.user.groups.all():
+            context.update({"principal":1})
+    except:
+        pass
+    return render(request, 'teacher/teacher.html',context)
+
+
+
+
+
+
+
+
+
+
 @login_required
 def view_attendance(request):
     #event = 

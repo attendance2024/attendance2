@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import addattendance
+from .models import *
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .forms import *
@@ -52,7 +52,8 @@ def add_attendance(request):
 
 @login_required()    
 def view_attendance(request):
-    attendance_records = addattendance.objects.all()
+    stud = student.objects.filter(user=request.user).first()
+    attendance_records = addattendance.objects.filter(student=stud)
     print(attendance_records)
     return render(request, 'student/view_attendance.html', {'attendance_records': attendance_records})
 @login_required()    
