@@ -1,3 +1,6 @@
+#student/models.py
+
+
 from django.db import models
 from django.conf import settings
 from django import forms
@@ -52,18 +55,34 @@ class status(models.Model):
     def __str__(self):
         return self.status_descr
 class addattendance(models.Model):
+    Status = [
+        ('pending','pending'),
+        ('rejected','rejected'),
+        ('ap_by_teacher','ap_by_teacher'),
+        ('ap_by_tutor','ap_by_tutor'),
+        ('ap_by_hod','ap_by_hod'),
+        ('ap_by_princi','ap_by_princi'),
+        ('ap_by_tutor_2','ap_by_tutor_2')
+        
+    ]
     event = models.ForeignKey(event,on_delete=models.CASCADE)
     student = models.ForeignKey(student,on_delete=models.CASCADE)
     date = models.DateField()
     hour = models.SmallIntegerField(null=True)
     totalhour = models.IntegerField(default=1)
-    status_id = models.ForeignKey(status,on_delete=models.CASCADE,null=True)
+    status_id = models.CharField(max_length=15, choices=Status, default='pending')
+
+
+    def __str__(self):
+        return f"Attendence - {self.student.student_name} - {self.event.ex_id} - {self.event.event_description} - {self.status_id}"
+
 
 
 class tutor(models.Model):
     pgm_id = models.ForeignKey(programme,on_delete=models.CASCADE)
     sem = models.IntegerField()
     teacher_id = models.ForeignKey(teacher,on_delete=models.CASCADE)
+    
 class hod(models.Model):
     teacher_id = models.ForeignKey(teacher,on_delete=models.CASCADE)
     dept_id = models.ForeignKey(department,on_delete=models.CASCADE)

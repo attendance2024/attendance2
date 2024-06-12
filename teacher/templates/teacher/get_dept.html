@@ -1,0 +1,57 @@
+<!-- teacher/templates/teacher/get_charge.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charge Attendance</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Students Attendance for Event</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Student RegNo</th>
+                    <th>Student Name</th>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Hour</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if attendance_records %}
+                    {% for record in attendance_records %}
+                        <tr>
+                            <td>{{ record.student.reg_no }}</td>
+                            <td>{{ record.student.student_name }}</td>
+                            <td>{{ record.event.event_description }}</td>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.hour }}</td>
+                            <td>
+                                {% if record.status_id == 'ap_by_teacher' %}
+                                    <a href="{% url 'tutor_accept' %}?att_id={{record.id}}">Accept</a>
+                                {% elif record.status_id == 'ap_by_tutor' %}
+                                    Pending Principal Approval 
+                                {% elif record.status_id == 'ap_by_princi' %}
+                                    Aproved Successfully
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">No records found</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+        <a href="{% url 'teacher' %}" class="btn btn-primary mt-3">Back to Dashboard</a>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -15,7 +15,7 @@
                 <th>Event</th>
                 <th>Date</th>
                 <th>Hour</th>
-                <th>Status<th>
+                <th>Status</th>
               
             </tr>
         </thead>
@@ -27,6 +27,23 @@
                     <td>{{ attendance.event }}</td>
                     <td>{{ attendance.date }}</td>
                     <td>{{ attendance.hour }}</td>
+                    <td>
+                    {% if attendance.status_id == 'pending'%}
+                    Pending
+                    {% elif attendance.status_id == 'ap_by_teacher' %}
+                    Aproved By Teacher
+                    {% elif attendance.status_id == 'ap_by_tutor' %}
+                    Aproved By Tutor
+                    {% elif attendance.status_id == 'ap_by_hod' %}
+                    Aproved By HoD
+                    {% elif attendance.status_id == 'ap_by_tutor_2' %}
+                    Aproved Successfully
+                    {% elif attendance.status_id == 'ap_by_princi' %}
+                    Aproved By Principal
+                    {% elif attendance.status_id == 'rejected' %}
+                    Rejected
+                    {%endif%}
+                    </td>
                  
                  
                 </tr>

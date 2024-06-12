@@ -54,7 +54,6 @@ def add_attendance(request):
 def view_attendance(request):
     stud = student.objects.filter(user=request.user).first()
     attendance_records = addattendance.objects.filter(student=stud)
-    print(attendance_records)
     return render(request, 'student/view_attendance.html', {'attendance_records': attendance_records})
 @login_required()    
 def success(request):
