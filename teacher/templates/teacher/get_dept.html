@@ -38,6 +38,7 @@
                                     Pending Principal Approval 
                                 {% elif record.status_id == 'ap_by_princi' %}
                                     Aproved Successfully
+                                    <a href="{% url 'generate_report' %}?att_id={{record.id}}" class="btn btn-primary mt-3">Generate Report</a>
                                 {% endif %}
                             </td>
                         </tr>

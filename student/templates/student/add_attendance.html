@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add Attendance</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <form action="{% url 'add_attendance' %}" method="post">
         {% csrf_token %}
-    <select name="event">
-    <option>----------------</option>
-    {% for i in eve %}
-    <option value="{{i.event_description}}" >{{i.event_description}}</option>
-    {% endfor %}
-    </select>
-        Date: <input type="date" name="date" ><br>
+        <label for="extracurricular">Extracurricular Activities:</label>
+        <select id="extracurricular" name="extracurricular">
+            <option value="">Select Extracurricular</option>
+            {% for activity in activities %}
+                <option value="{{ activity.id }}">{{ activity.ex_name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label for="event">Event:</label>
+        <select id="event" name="event">
+            <option value="">Select Event</option>
+        </select>
+        <br>
+
+        Date: <input type="date" name="date"><br>
         1: <input type="checkbox" name="hour" value="1">
         2: <input type="checkbox" name="hour" value="2">
         3: <input type="checkbox" name="hour" value="3">
@@ -22,7 +32,34 @@
         5: <input type="checkbox" name="hour" value="5">
         <br>
         Total hours: <input type="text" name="totalhours">
-        Submit: <input type="submit" >
+        Submit: <input type="submit">
     </form>
+
+    <script>
+        $(document).ready(function() {
+            $('#extracurricular').change(function() {
+                var extracurricularId = $(this).val();
+                if (extracurricularId) {
+                    $.ajax({
+                        url: "{% url 'filter_events' %}",
+                        data: {
+                            'extracurricular_id': extracurricularId
+                        },
+                        success: function(data) {
+                            var eventSelect = $('#event');
+                            eventSelect.empty();
+                            eventSelect.append('<option value="">Select Event</option>');
+                            $.each(data.events, function(index, event) {
+                                eventSelect.append('<option value="' + event.event_description + '">' + event.event_description + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#event').empty();
+                    $('#event').append('<option value="">Select Event</option>');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

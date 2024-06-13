@@ -10,7 +10,7 @@ from student.models import *
 #
 
 @login_required
-def teacher(request):
+def teacher_login(request):
     context = {}
     try:
         teacher = studentmodel.teacher.objects.get(user=request.user)
@@ -27,7 +27,7 @@ def teacher(request):
         if tutor_class:
             context.update({'tutor': tutor_class})
 
-        if request.user.groups.filter(name='principal').exists():
+        if studentmodel.principal.objects.filter(teacher_id=teacher).exists():
             context.update({"principal": 1})
 
     except studentmodel.teacher.DoesNotExist:
@@ -35,6 +35,47 @@ def teacher(request):
 
     return render(request, 'teacher/teacher.html', context)
 
+def get_tutors(request):
+    # Get the teacher instance associated with the logged-in user
+    teacher_instance = request.user.teacher
+
+    # Get the department of the teacher
+    dept_id = teacher_instance.dept_id
+
+    # Get the tutor instance associated with the teacher
+    tutor_instance = tutor.objects.filter(teacher_id=teacher_instance).first()  # Get the first tutor instance
+
+    if tutor_instance:
+        tutor_sem = tutor_instance.sem
+
+        # Filter attendance records by department, status 'ap_by_teacher', and matching semester
+        attendance_records = addattendance.objects.filter(
+            student__prg_id__dept_id=dept_id,
+            status_id__in=['ap_by_teacher', 'ap_by_tutor', 'ap_by_princi'],
+            student__current_sem=tutor_sem
+        )
+    else:
+        attendance_records = []
+
+    context = {
+        'attendance_records': attendance_records,
+    }
+    return render(request, 'teacher/get_dept.html', context)
+
+def add_event(request):
+    teacher_instance = teacher.objects.filter(user=request.user).first()
+    charge_instance = charge.objects.filter(teacher_id=teacher_instance).first() if teacher_instance else None
+    initial_data = {'ex_id': charge_instance.ex_id} if charge_instance else {}
+
+    if request.method == 'POST':
+        form = EventForm(request.POST, initial=initial_data)
+        if form.is_valid():
+            form.save()
+            return redirect('get_charge')
+    else:
+        form = EventForm(initial=initial_data)
+
+    return render(request, 'teacher/add_event.html', {'form': form})
 
 def get_charge(request):
     # Assuming the logged-in teacher is in charge of an event
@@ -50,22 +91,7 @@ def get_charge(request):
     }
     return render(request, 'teacher/get_charge.html', context)
 
-def add_event(request):
-    try:
-        teacher_instance = get_object_or_404(teacher, user=request.user)
-        charge_instance = get_object_or_404(charge, teacher_id=teacher_instance)
-        initial_data = {'ex_id': charge_instance.ex_id}
-    except charge.DoesNotExist:
-        initial_data = {}
-        
-    if request.method == 'POST':
-        form = EventForm(request.POST, initial=initial_data)
-        if form.is_valid():
-            form.save()
-            return redirect('event_list')  # Redirect to the event list page after adding the event
-    else:
-        form = EventForm(initial=initial_data)
-    return render(request, 'add_event.html', {'form': form})
+
 
 def get_dept(request):
     # Get the teacher instance associated with the logged-in user
@@ -86,32 +112,25 @@ def get_dept(request):
     return render(request, 'teacher/get_hod.html', context)
 
 
-def get_tutors(request):
+def get_princi(request):
     # Get the teacher instance associated with the logged-in user
     teacher_instance = request.user.teacher
 
     # Get the department of the teacher
     dept_id = teacher_instance.dept_id
 
-    # Get the tutor instance associated with the teacher
-    tutor_instance = tutor.objects.filter(teacher_id=teacher_instance).first()  # Get the first tutor instance
-
-    if tutor_instance:
-        tutor_sem = tutor_instance.sem
-
-        # Filter attendance records by department, status 'ap_by_teacher', and matching semester
-        attendance_records = addattendance.objects.filter(
-            student__prg_id__dept_id=dept_id,
-            status_id__in=['ap_by_teacher', 'ap_by_tutor'],
-            student__current_sem=tutor_sem
-        )
-    else:
-        attendance_records = []
+    # Filter attendance records by the department and status 'ap_by_teacher'
+    attendance_records = addattendance.objects.filter(
+        status_id__in=['ap_by_hod', 'ap_by_princi'],
+    )
 
     context = {
         'attendance_records': attendance_records,
     }
-    return render(request, 'teacher/get_dept.html', context)
+    return render(request, 'teacher/get_princi.html', context)
+
+
+
 
 def tutor_accept(request):
     att_id = request.GET.get('att_id')
@@ -119,6 +138,13 @@ def tutor_accept(request):
     att.status_id = 'ap_by_tutor'
     att.save()
     return redirect('get_tutors')
+
+def princi_accept(request):
+    att_id = request.GET.get('att_id')
+    att = get_object_or_404(addattendance, id=att_id) 
+    att.status_id = 'ap_by_princi'
+    att.save()
+    return redirect('get_princi')
 
 def hod_accept(request):
     att_id = request.GET.get('att_id')
@@ -169,3 +195,26 @@ def edit_attendance(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+def generate_report(request):
+    att_id = request.GET.get('att_id')
+    attendance_record = get_object_or_404(addattendance, id=att_id, status_id='ap_by_princi')
+
+    # Create a report (for simplicity, we'll just create a text report)
+    report_content = f"""
+    Attendance Report
+    -----------------
+    Student Name: {attendance_record.student.student_name}
+    Registration Number: {attendance_record.student.reg_no}
+    Event: {attendance_record.event.event_description}
+    Date: {attendance_record.date}
+    Hour: {attendance_record.hour}
+    Status: Approved By Pricipal 
+    """
+
+    # Create an HTTP response with the report content
+    response = HttpResponse(report_content, content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename="report_{attendance_record.id}.txt"'
+
+    return response
