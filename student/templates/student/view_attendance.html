@@ -4,52 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Attendance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #343a40; /* Dark header color */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        table th {
+            background-color: #031e3a; /* Blue header background */
+            color: #fff;
+        }
+        table tbody tr:nth-child(even) {
+            background-color: #f2f2f2; /* Alternate row background color */
+        }
+        table tbody tr:hover {
+            background-color: #e9ecef; /* Hover row background color */
+        }
+        .back-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #343a40; /* Darker background color */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-link:hover {
+            background-color: #23272b; /* Even darker shade on hover */
+            text-decoration: none; /* Remove underline on hover */
+        }
+    </style>
 </head>
 <body>
     <h1>Attendance Records</h1>
-    <table border=1>
+    <table>
         <thead>
             <tr>
-              
                 <th>Student ID</th>
                 <th>Event</th>
                 <th>Date</th>
                 <th>Hour</th>
                 <th>Status</th>
-              
             </tr>
         </thead>
         <tbody>
             {% for attendance in attendance_records %}
                 <tr>
-                  
                     <td>{{ attendance.student_id }}</td>
                     <td>{{ attendance.event }}</td>
                     <td>{{ attendance.date }}</td>
                     <td>{{ attendance.hour }}</td>
                     <td>
-                    {% if attendance.status_id == 'pending'%}
-                    Pending
-                    {% elif attendance.status_id == 'ap_by_teacher' %}
-                    Aproved By Teacher
-                    {% elif attendance.status_id == 'ap_by_tutor' %}
-                    Aproved By Tutor
-                    {% elif attendance.status_id == 'ap_by_hod' %}
-                    Aproved By HoD
-                    {% elif attendance.status_id == 'ap_by_tutor_2' %}
-                    Aproved Successfully
-                    {% elif attendance.status_id == 'ap_by_princi' %}
-                    Aproved By Principal
-                    {% elif attendance.status_id == 'rejected' %}
-                    Rejected
-                    {%endif%}
+                        {% if attendance.status_id == 'pending' %}
+                            Pending
+                        {% elif attendance.status_id == 'ap_by_teacher' %}
+                            Approved By Teacher
+                        {% elif attendance.status_id == 'ap_by_tutor' %}
+                            Approved By Tutor
+                        {% elif attendance.status_id == 'ap_by_hod' %}
+                            Approved By HoD
+                        {% elif attendance.status_id == 'ap_by_tutor_2' %}
+                            Approved Successfully
+                        {% elif attendance.status_id == 'ap_by_princi' %}
+                            Approved By Principal
+                        {% elif attendance.status_id == 'rejected' %}
+                            Rejected
+                        {% endif %}
                     </td>
-                 
-                 
                 </tr>
             {% endfor %}
-         </tbody> 
+        </tbody> 
     </table>
-    <p><a href="{% url 'student' %}">Back</a></p>
+    <div class="back-container">
+        <a href="{% url 'student' %}" class="back-link">Back</a>
+    </div>
 </body>
 </html>

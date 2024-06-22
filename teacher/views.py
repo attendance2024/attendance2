@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .models import editattendance
+from weasyprint import HTML, CSS
+from datetime import datetime
 from .forms import *
 from django.contrib.auth.models import Group
 from student import models as studentmodel
@@ -172,49 +173,34 @@ def teacher_reject(request):
 
 
 @login_required
-def view_attendance(request):
-    #event = 
-    attendance_records = studentmodel.addattendance.objects.filter(request.user)
-    return render(request, 'teacher/view_attendance.html', {'attendance_records': attendance_records})
-
-
-@login_required
-def edit_attendance(request):
-    if request.method == 'POST':
-        form = editattendanceForm(request.POST)
-        if form.is_valid():
-            attendance = form.save(commit=False)
-            attendance.student = request.user
-            attendance.save()
-            return redirect('view_attendance')
-    else:
-        form = editattendanceForm()
-    return render(request, 'teacher/edit_attendance.html', {'form': form})
-
-@login_required
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+from weasyprint import HTML, CSS
+from django.template.loader import render_to_string
+
 def generate_report(request):
     att_id = request.GET.get('att_id')
     attendance_record = get_object_or_404(addattendance, id=att_id, status_id='ap_by_princi')
+    department_name = attendance_record.student.prg_id.dept_id.dept_name
 
-    # Create a report (for simplicity, we'll just create a text report)
-    report_content = f"""
-    Attendance Report
-    -----------------
-    Student Name: {attendance_record.student.student_name}
-    Registration Number: {attendance_record.student.reg_no}
-    Event: {attendance_record.event.event_description}
-    Date: {attendance_record.date}
-    Hour: {attendance_record.hour}
-    Status: Approved By Pricipal 
-    """
+    # Render the HTML template with context
+    html_string = render_to_string('teacher/report_template.html', {
+        'attendance_record': attendance_record,
+        'department_name': department_name,
+        'current_date': datetime.now().strftime('%Y-%m-%d')
+    })
 
-    # Create an HTTP response with the report content
-    response = HttpResponse(report_content, content_type='text/plain')
-    response['Content-Disposition'] = f'attachment; filename="report_{attendance_record.id}.txt"'
+    # Generate PDF
+    html = HTML(string=html_string)
+    result = html.write_pdf()
+
+    # Create HTTP response with PDF content
+    response = HttpResponse(result, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="report_{attendance_record.id}.pdf"'
 
     return response

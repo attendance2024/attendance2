@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from .models import *
 
 class  DateInput(forms.DateInput):
@@ -22,22 +23,4 @@ class studentform(forms.ModelForm):
         }
 
 
-class teacherform(forms.ModelForm):
-    class Meta:
-        model = teacher
-        fields = '__all__'
 
-class tutorform(forms.ModelForm):
-    class Meta:
-        model = tutor
-        fields = '__all__'
-
-class hodform(forms.ModelForm):
-    class Meta:
-        model = hod
-        fields = '__all__'
-
-class addform(forms.ModelForm):
-    class Meta:
-        model = addattendance
-        fields = 'event','date','hour'    

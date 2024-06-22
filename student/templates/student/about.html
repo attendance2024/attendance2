@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .about-section {
+            background-color: #fff;
+            padding: 80px 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 40px auto;
+            width: 80%;
+            border-radius: 10px;
+        }
+        .about-section h2 {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: #343a40;
+        }
+        .about-section p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+        }
+        .pictures {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .pictures img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pictures img:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #343a40;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2>About</h2>
+            <p>The "Attendance Management System for Extra-Curricular Activities" streamlines and enhances attendance management for students participating in NCC, NSS, Fine Arts, and Sports. It provides an efficient and accurate method for recording and approving attendance for students missing regular classes due to these activities. Students log their attendance, which is verified by the in-charge teacher and sequentially approved by the tutor, HOD, and principal, ensuring accuracy and legitimacy. This system helps educational institutions maintain precise attendance records, reduce administrative burdens, and support students in balancing their academic and extra-curricular commitments. Leveraging technology, it promotes students' holistic development by acknowledging their contributions to extra-curricular activities.</p>
+            <div class="pictures">
+                <img src="{% static 'images/arts.png' %}" alt="Arts">
+                <img src="{% static 'images/ncc.jpg' %}" alt="NCC">
+                <img src="{% static 'images/nss.png' %}" alt="NSS">
+                <img src="{% static 'images/sports.jpg' %}" alt="Sports">
+            </div>
+            <button class="back-button" onclick="window.history.back()">Back</button>
+        </div>
+    </section>
+</body>
+</html>

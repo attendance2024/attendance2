@@ -4,39 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Attendance</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .attendance-form {
+            background-color: #343a40; /* Dark background color for form */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #fff; /* White color for labels */
+        }
+        select, input[type="date"], input[type="text"], input[type="checkbox"], input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #495057; /* Dark background color for inputs */
+            color: #fff; /* White color for text in inputs */
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .back-link-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6c757d; /* Medium dark background color for back link */
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .back-link:hover {
+            background-color: #495057; /* Darker shade on hover */
+            text-decoration: none; /* Remove underline on hover */
+        }
+        h2 {
+            color: #fff; /* White header color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <form action="{% url 'add_attendance' %}" method="post">
-        {% csrf_token %}
-        <label for="extracurricular">Extracurricular Activities:</label>
-        <select id="extracurricular" name="extracurricular">
-            <option value="">Select Extracurricular</option>
-            {% for activity in activities %}
-                <option value="{{ activity.id }}">{{ activity.ex_name }}</option>
-            {% endfor %}
-        </select>
-        <br>
+    <div class="attendance-form">
+        <h2>Add Attendance</h2>
+        <form action="{% url 'add_attendance' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="extracurricular">Extracurricular Activities:</label>
+                <select id="extracurricular" name="extracurricular" required>
+                    <option value="">Select Extracurricular</option>
+                    {% for activity in activities %}
+                        <option value="{{ activity.id }}">{{ activity.ex_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <label for="event">Event:</label>
-        <select id="event" name="event">
-            <option value="">Select Event</option>
-        </select>
-        <br>
+            <div class="form-group">
+                <label for="event">Event:</label>
+                <select id="event" name="event" required>
+                    <option value="">Select Event</option>
+                </select>
+            </div>
 
-        Date: <input type="date" name="date"><br>
-        1: <input type="checkbox" name="hour" value="1">
-        2: <input type="checkbox" name="hour" value="2">
-        3: <input type="checkbox" name="hour" value="3">
-        4: <input type="checkbox" name="hour" value="4">
-        5: <input type="checkbox" name="hour" value="5">
-        <br>
-        Total hours: <input type="text" name="totalhours">
-        Submit: <input type="submit">
-    </form>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
 
+            <div class="form-group">
+                <label>Hours:</label><br>
+                <label><input type="checkbox" name="hour" value="1"> 1</label>
+                <label><input type="checkbox" name="hour" value="2"> 2</label>
+                <label><input type="checkbox" name="hour" value="3"> 3</label>
+                <label><input type="checkbox" name="hour" value="4"> 4</label>
+                <label><input type="checkbox" name="hour" value="5"> 5</label>
+            </div>
+
+            <div class="form-group">
+                <label for="totalhours">Total Hours:</label>
+                <input type="text" id="totalhours" name="totalhours">
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+
+        <div class="back-link-wrapper">
+            <a href="{% url 'student' %}" class="back-link" id="back-link">Back</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Handle hover effect with jQuery
+            $('#back-link').hover(function() {
+                $(this).css('background-color', '#495057'); /* Darker background color on hover */
+            }, function() {
+                $(this).css('background-color', '#6c757d'); /* Original background color on mouse out */
+            });
+
+            // AJAX request example for extracurricular events (you can adapt this to your actual implementation)
             $('#extracurricular').change(function() {
                 var extracurricularId = $(this).val();
                 if (extracurricularId) {

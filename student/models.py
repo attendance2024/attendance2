@@ -1,7 +1,9 @@
 #student/models.py
 
 
-from django.db import models
+from django.db import models, IntegrityError
+from django.core.exceptions import ValidationError
+from django.db.models.functions import Lower
 from django.conf import settings
 from django import forms
 # Create your models here.
@@ -31,6 +33,24 @@ class student(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     def __str__(self):
         return self.student_name
+
+    
+    def clean(self):
+        # Case-insensitive uniqueness check for reg_no
+        if student.objects.filter(reg_no__iexact=self.reg_no).exclude(pk=self.pk).exists():
+            raise ValidationError(f"A student with registration number '{self.reg_no}' already exists.")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                Lower('reg_no'),
+                name='unique_reg_no_case_insensitive'
+            )
+        ]    
 class extra_curricular_activities(models.Model):
     ex_name = models.CharField(max_length=120)
     def __str__(self):
