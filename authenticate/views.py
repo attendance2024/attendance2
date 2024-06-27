@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.models import Group
 from .forms import LoginForm
+from django.contrib import messages
 
 # Create your views here.
 def login_view(request):
@@ -31,8 +32,8 @@ def login_view(request):
                 #     return redirect('tutor')
                 # elif Group.objects.get(name='principal') in user.groups.all():
                 #     return redirect('principal')
-        else:
-            return render(request, 'authenticate/login.html', {'form': form, 'error': 'Invalid username or password'})
+            else:
+                messages.error(request,f"Sorry, Invalid user")
     return render(request, 'authenticate/login.html', {'form': form})
     
 def logout_view(request):

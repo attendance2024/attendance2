@@ -7,8 +7,11 @@ from .forms import *
 from django.contrib.auth.models import Group
 from student import models as studentmodel
 from student.models import *
+from django.contrib.auth.forms import UserCreationForm
+from django.template.loader import render_to_string
 
-#
+
+
 
 @login_required
 def teacher_login(request):
@@ -36,6 +39,7 @@ def teacher_login(request):
 
     return render(request, 'teacher/teacher.html', context)
 
+@login_required
 def get_tutors(request):
     # Get the teacher instance associated with the logged-in user
     teacher_instance = request.user.teacher
@@ -63,6 +67,7 @@ def get_tutors(request):
     }
     return render(request, 'teacher/get_dept.html', context)
 
+@login_required
 def add_event(request):
     teacher_instance = teacher.objects.filter(user=request.user).first()
     charge_instance = charge.objects.filter(teacher_id=teacher_instance).first() if teacher_instance else None
@@ -78,6 +83,7 @@ def add_event(request):
 
     return render(request, 'teacher/add_event.html', {'form': form})
 
+@login_required
 def get_charge(request):
     # Assuming the logged-in teacher is in charge of an event
     teacher = request.user.teacher
@@ -93,7 +99,7 @@ def get_charge(request):
     return render(request, 'teacher/get_charge.html', context)
 
 
-
+@login_required
 def get_dept(request):
     # Get the teacher instance associated with the logged-in user
     teacher_instance = request.user.teacher
@@ -112,7 +118,7 @@ def get_dept(request):
     }
     return render(request, 'teacher/get_hod.html', context)
 
-
+@login_required
 def get_princi(request):
     # Get the teacher instance associated with the logged-in user
     teacher_instance = request.user.teacher
@@ -122,7 +128,7 @@ def get_princi(request):
 
     # Filter attendance records by the department and status 'ap_by_teacher'
     attendance_records = addattendance.objects.filter(
-        status_id__in=['ap_by_hod', 'ap_by_princi'],
+        status_id__in=['ap_by_hod'],
     )
 
     context = {
@@ -132,7 +138,7 @@ def get_princi(request):
 
 
 
-
+@login_required
 def tutor_accept(request):
     att_id = request.GET.get('att_id')
     att = get_object_or_404(addattendance, id=att_id) 
@@ -140,13 +146,14 @@ def tutor_accept(request):
     att.save()
     return redirect('get_tutors')
 
+@login_required
 def princi_accept(request):
     att_id = request.GET.get('att_id')
     att = get_object_or_404(addattendance, id=att_id) 
     att.status_id = 'ap_by_princi'
     att.save()
     return redirect('get_princi')
-
+@login_required
 def hod_accept(request):
     att_id = request.GET.get('att_id')
     att = get_object_or_404(addattendance, id=att_id) 
@@ -155,7 +162,7 @@ def hod_accept(request):
     return redirect('get_dept')
 
 
-
+@login_required
 def teacher_accept(request):
     att_id = request.GET.get('att_id')
     att = get_object_or_404(addattendance, id=att_id) 
@@ -163,7 +170,7 @@ def teacher_accept(request):
     att.save()
     return redirect('get_charge')
 
-
+@login_required
 def teacher_reject(request):
     att_id = request.GET.get('att_id')
     att = get_object_or_404(addattendance, id=att_id) 
@@ -178,11 +185,7 @@ def logout_view(request):
     return redirect('login')
 
 
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
-from weasyprint import HTML, CSS
-from django.template.loader import render_to_string
-
+@login_required
 def generate_report(request):
     att_id = request.GET.get('att_id')
     attendance_record = get_object_or_404(addattendance, id=att_id, status_id='ap_by_princi')
@@ -202,5 +205,84 @@ def generate_report(request):
     # Create HTTP response with PDF content
     response = HttpResponse(result, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="report_{attendance_record.id}.pdf"'
-
     return response
+
+
+
+@login_required
+def addteacher(request):
+    if request.method == 'POST':
+        user_form = UserCreationForm(request.POST)
+        teacher_form = TeacherForm(request.POST)
+        if user_form.is_valid() and teacher_form.is_valid():
+            user = user_form.save()
+            teacher = teacher_form.save(commit=False)
+            teacher.user = user
+            teacher.save()
+            teacher_group = Group.objects.get(name='teacher')
+            user.groups.add(teacher_group)
+            #return redirect('home')
+        
+    else:
+        user_form = UserCreationForm()
+        teacher_form = TeacherForm()
+    
+    return render(request, 'teacher/create_user.html', {
+        'user_form': user_form,
+        'teacher_form': teacher_form,
+        'teacher': True
+    })
+
+@login_required
+def addstudent(request):
+    if request.method == 'POST':
+        user_form = UserCreationForm(request.POST)
+        student_form = StudentForm(request.POST)
+        if user_form.is_valid() and student_form.is_valid():
+            user = user_form.save()
+            student = student_form.save(commit=False)
+            student.user = user
+            student.save()
+            student_group = Group.objects.get(name='student')
+            user.groups.add(student_group)
+            #return redirect('home')
+        else:
+            print(user_form.errors)  # Debug statement for user form errors
+            print(student_form.errors)  # Debug statement for student form errors
+    user_form = UserCreationForm()
+    student_form = StudentForm()
+    
+    return render(request, 'teacher/create_user.html', {
+        'user_form': user_form,
+        'student_form': student_form,
+        'student': True
+    })
+
+@login_required
+def assign_teacher_position(request):
+    if request.method == 'POST':
+        form = TeacherPositionForm(request.POST)
+        if form.is_valid():
+            teacher_obj = form.cleaned_data['teacher']
+            positions = form.cleaned_data['position']
+            dept_id = form.cleaned_data['dept_id']
+            prg_id = form.cleaned_data['prg_id']
+            sem = form.cleaned_data['sem']
+            ex_id = form.cleaned_data['ex_id']
+
+            if 'incharge' in positions and ex_id:
+                charge.objects.create(teacher_id=teacher_obj, ex_id=ex_id)
+            if 'hod' in positions and dept_id:
+                hod.objects.create(teacher_id=teacher_obj, dept_id=dept_id)
+            if 'tutor' in positions and prg_id and sem:
+                tutor.objects.create(teacher_id=teacher_obj, pgm_id=prg_id, sem=sem)
+            if 'principal' in positions:
+                principal.objects.create(teacher_id=teacher_obj)
+
+            #return redirect('teacher_dashboard')
+        else:
+            # Print form errors for debugging
+            print(form.errors)
+    else:
+        form = TeacherPositionForm()
+    return render(request, 'teacher/assign_teacher_position.html', {'form': form})

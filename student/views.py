@@ -9,7 +9,7 @@ from .forms import *
 
 
 
-
+@login_required()
 def StudentLogin(request):
     if request.method == "POST":    
         form = studentform(request.POST)
@@ -18,12 +18,13 @@ def StudentLogin(request):
     forms = studentform()
     return render(request,'student/student.html',{'form':forms}) 
 
+@login_required()
 def success_view(request):
     return render(request, 'student/success.html')
 
 
 def home(request):
-    return render(request,'student/home.html')
+    return render(request,'student/base.html')
 
 @login_required()
 def add_attendance(request):
@@ -51,6 +52,7 @@ def add_attendance(request):
     
     return render(request, 'student/add_attendance.html', context)
 
+@login_required()
 def filter_events(request):
     extracurricular_id = request.GET.get('extracurricular_id')
     events = event.objects.filter(ex_id=extracurricular_id).values('event_description')
@@ -65,5 +67,6 @@ def view_attendance(request):
 @login_required()    
 def success(request):
     return render(request,'student/success.html') 
+@login_required()    
 def aboutcollege(request):
     return render(request, 'student/about.html')

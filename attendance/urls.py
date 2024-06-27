@@ -20,12 +20,8 @@ from student import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('authenticate.urls')),
-    path('student/',include('student.urls')),
+    path('accounts/',include('authenticate.urls')),
+    path('',include('student.urls')),
     path('teacher/',include('teacher.urls')),
-    path('hod/',include('hod.urls')),
-    path('tutor/',include('tutor.urls')),
-    path('principal/',include('principal.urls')),
-    path('',views.home,name="home")
 ]
 

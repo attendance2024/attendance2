@@ -22,6 +22,7 @@
             font-size: 28px;
             font-weight: bold;
             text-transform: uppercase;
+            margin-right: auto; /* Move to the left */
         }
         .navbar-toggler {
             border: none !important;
@@ -32,6 +33,7 @@
             padding: 8px 16px; /* Add padding to create a square shape */
             border-radius: 5px; /* Square shape with slightly rounded corners */
             transition: background-color 0.3s ease;
+            background-color: #495057; /* Background color for non-hover state */
         }
         .navbar-nav .nav-link:hover {
             background-color: #ff4081 !important; /* Change background color on hover */
@@ -84,13 +86,14 @@
         .btn-primary:hover {
             background-color: #f50057;
         }
+        
     </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-md navbar-dark">
     <div class="container">
-        <a class="navbar-brand" href="#">Nehru Arts and Science</a>
+        <a class="navbar-brand" href="#">Nehru Arts and Science College Kanhangad</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -107,12 +110,12 @@
 
 <div class="header-section">
     <div class="header-overlay">
-        <h1>Welcome to Nehru Arts and Science</h1>
+        <h1>Welcome to Nehru Arts and Science College</h1>
         <a href="{% url 'login' %}" class="btn btn-primary">Go To Login</a>
     </div>
 </div>
 
-<footer class="pt-2 pb-2">
+<footer>
     <div class="container">
         <p>&copy; 2024 Nehru Arts and Science College Padnakkad</p>
     </div>

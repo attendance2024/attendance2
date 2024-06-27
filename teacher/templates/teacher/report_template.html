@@ -6,7 +6,7 @@
     <title>Attendance Report</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
@@ -14,33 +14,55 @@
         }
         .container {
             width: 80%;
-            margin: 0 auto;
+            max-width: 800px;
+            margin: 40px auto;
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
-            color: #4CAF50;
+            color: #343a40; /* Dark gray text for header */
+            margin-bottom: 30px;
+            font-size: 28px; /* Larger font size for header */
+            text-transform: uppercase; /* Uppercase text */
+            letter-spacing: 1px; /* Letter spacing for emphasis */
         }
         .report-details {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
         }
         .report-details th, .report-details td {
             text-align: left;
-            padding: 8px;
+            padding: 12px;
             border-bottom: 1px solid #ddd;
         }
         .report-details th {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #007bff; /* Blue background for header cells */
+            color: #fff; /* White text color for header cells */
+            border-top: 2px solid #007bff; /* Top border for header */
+            font-weight: bold;
+            text-transform: uppercase; /* Uppercase text */
+        }
+        .report-details td {
+            background-color: #f8f9fa; /* Light gray background for data cells */
         }
         .footer {
             margin-top: 30px;
             text-align: center;
-            font-size: 0.8em;
+            font-size: 0.9em;
             color: #777;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+                padding: 15px;
+            }
+            .report-details th, .report-details td {
+                padding: 8px;
+            }
         }
     </style>
 </head>

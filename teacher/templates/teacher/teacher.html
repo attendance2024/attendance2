@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-color: whitesmoke;
+             background: url('{% static "images/nehrucollege.jpg" %}') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #333;
@@ -111,6 +112,15 @@
             </div>
         {% endif %}
         {% if principal %}
+            <div class="btn-row">
+                <a href="{% url 'create_teacher' %}" class="btn btn-custom">Add Teacher</a>
+            </div>
+            <div class="btn-row">
+                <a href="{% url 'assign_teacher_position' %}" class="btn btn-custom">Assign Teacher Position</a>
+            </div>
+            <div class="btn-row">
+                <a href="{% url 'create_student' %}" class="btn btn-custom">Add Student</a>
+            </div>
             <div class="btn-row">
                 <a href="{% url 'get_princi' %}" class="btn btn-custom">Principal</a>
             </div>

@@ -1,6 +1,4 @@
 #student/models.py
-
-
 from django.db import models, IntegrityError
 from django.core.exceptions import ValidationError
 from django.db.models.functions import Lower

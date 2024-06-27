@@ -152,12 +152,34 @@
             font-style: italic;
             color: #680000;
         }
+        .messages{
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 10vh;
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: bolder;
+        }
+        mark{
+            background: linear-gradient(#b3d9ff 0%, #ffffff 100%);
+            padding: 6px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <section>
-        <h1>Login</h1>
-        <center><p class="error">{{ error }}</p></center>
+        {% if messages %}
+            <ul class="messages" >
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}> <mark>{{ message }}</mark></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <h1>Login</h1>
+
         <form method="POST">
             {% csrf_token %}
             {% for field in form %}
