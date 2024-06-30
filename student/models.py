@@ -91,7 +91,6 @@ class addattendance(models.Model):
     student = models.ForeignKey(student,on_delete=models.CASCADE)
     date = models.DateField()
     hour = models.SmallIntegerField(null=True)
-    totalhour = models.IntegerField(default=1)
     status_id = models.CharField(max_length=15, choices=Status, default='pending')
 
 

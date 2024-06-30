@@ -37,15 +37,14 @@ def add_attendance(request):
         student_instance = student.objects.get(user=request.user)
         date = request.POST.get('date')
         hours = request.POST.getlist('hour')
-        totalhour = request.POST.get('totalhours')
+        
         
         for hour in hours:
             attendance = addattendance(
                 event=event_instance,
                 student=student_instance,
                 date=date,
-                hour=hour,
-                totalhour=totalhour
+                hour=hour
             )
             attendance.save()
         return redirect('success')
