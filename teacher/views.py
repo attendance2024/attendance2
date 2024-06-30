@@ -110,7 +110,7 @@ def get_dept(request):
     # Filter attendance records by the department and status 'ap_by_teacher'
     attendance_records = addattendance.objects.filter(
         student__prg_id__dept_id=dept_id,
-        status_id__in=['ap_by_hod', 'ap_by_tutor'],
+        status_id__in=['ap_by_tutor'],
     )
 
     context = {

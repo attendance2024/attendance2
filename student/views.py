@@ -67,6 +67,6 @@ def view_attendance(request):
 @login_required()    
 def success(request):
     return render(request,'student/success.html') 
-@login_required()    
+  
 def aboutcollege(request):
     return render(request, 'student/about.html')

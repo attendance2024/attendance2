@@ -78,7 +78,7 @@
 <body>
     <div class="position-form">
         <h1>Assign Teacher Position</h1>
-        <form method="post" action="">
+        <form method="post" action="" id="create-user-form">
             {% csrf_token %}
             <div class="form-group">
                 {{ form.as_p }}
@@ -100,6 +100,28 @@
                 $(this).css('background-color', '#495057'); /* Darker background color on hover */
             }, function() {
                 $(this).css('background-color', '#6c757d'); /* Original background color on mouse out */
+            });
+
+            // Handle form submission with jQuery AJAX
+            $('#create-user-form').on('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var form = $(this);
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        // Clear the form inputs
+                        form.find('input[type="text"], input[type="email"], select, textarea').val('');
+                        // Optionally, show a success message
+                        alert('Form submitted successfully!');
+                    },
+                    error: function(response) {
+                        // Optionally, show an error message
+                        alert('There was an error submitting the form.');
+                    }
+                });
             });
         });
     </script>

@@ -81,7 +81,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4">Students Attendance for {{ charge_ex_name }}</h2>
+        <h2 class="mb-4">Students Attendance </h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -106,9 +106,9 @@
                         <td>{{ record.hour }}</td>
                         <td>
                             {% if record.status_id == 'ap_by_hod' %}
-                                <a href="{% url 'princi_accept' %}?att_id={{record.id}}" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure you want to accept this attendance?');">Accept</a> 
+                                <a href="{% url 'princi_accept' %}?att_id={{record.id}}" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure you want to accept this attendance?');">Order</a> 
                             {% elif record.status_id == 'ap_by_princi' %}
-                                <span class="text-success">Accepted</span>
+                                <span class="text-success">Ordered</span>
                             {% endif %}
                         </td>
                     </tr>

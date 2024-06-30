@@ -81,7 +81,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="mb-4">Students Attendance for Event</h2>
+        <h2 class="mb-4">Students Attendance</h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -104,7 +104,7 @@
                             <td>{{ record.hour }}</td>
                             <td>
                                 {% if record.status_id == 'ap_by_teacher' %}
-                                    <a href="{% url 'tutor_accept' %}?att_id={{record.id}}" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure you want to accept this attendance?');">Accept</a>
+                                    <a href="{% url 'tutor_accept' %}?att_id={{record.id}}" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure you want to accept this attendance?');">Recommend</a>
                                 {% elif record.status_id == 'ap_by_tutor' %}
                                     <span class="text-warning">Pending Principal Approval</span>
                                 {% elif record.status_id == 'ap_by_princi' %}

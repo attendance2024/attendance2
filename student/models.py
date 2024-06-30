@@ -75,10 +75,7 @@ class charge(models.Model):
     teacher_id = models.ForeignKey(teacher,on_delete=models.CASCADE)   
     ex_id = models.ForeignKey(extra_curricular_activities,on_delete=models.CASCADE)
 
-class status(models.Model):
-    status_descr = models.CharField(max_length=120)
-    def __str__(self):
-        return self.status_descr
+
 class addattendance(models.Model):
     Status = [
         ('pending','pending'),
@@ -112,10 +109,7 @@ class hod(models.Model):
     teacher_id = models.ForeignKey(teacher,on_delete=models.CASCADE)
     dept_id = models.ForeignKey(department,on_delete=models.CASCADE)
      
-class addform(forms.ModelForm):
-    class Meta:
-        model = addattendance
-        fields = '__all__'
+
 
 
 class principal(models.Model):
