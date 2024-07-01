@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'student',
     'teacher',
     'authenticate',
@@ -114,6 +115,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+STATICFILES_DIRS = [
+    '/home/abhirajk/Documents/attendance2/static',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
