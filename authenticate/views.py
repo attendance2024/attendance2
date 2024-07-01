@@ -26,6 +26,8 @@ def login_view(request):
                     return redirect('student')
                 elif Group.objects.get(name='teacher') in user.groups.all():
                     return redirect('teacher')
+                elif user.is_superuser:
+                    return redirect('teacher')    
                 # elif Group.objects.get(name='hod') in user.groups.all():
                 #     return redirect('hod')
                 # elif Group.objects.get(name='tutor') in user.groups.all():

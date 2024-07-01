@@ -88,10 +88,16 @@
     </style>
 </head>
 <body>
+    {% if teacher %}
+        <div class="dashboard-header">
+            <h1>TEACHER DASHBOARD</h1>
+        </div>
+    {% elif admin %} 
     <div class="dashboard-header">
-        <h1>TEACHER DASHBOARD</h1>
+        <h1>ADMIN DASHBOARD</h1>
     </div>
-
+    {% endif %}
+    
     <div class="container container-custom text-center">
         {% if hod %}
             <div class="btn-row">
@@ -112,6 +118,14 @@
             </div>
         {% endif %}
         {% if principal %}
+            
+            <div class="btn-row">
+                <a href="{% url 'get_princi' %}" class="btn btn-custom">Principal</a>
+            </div>
+            
+            
+        {% endif %}
+        {% if admin %}
             <div class="btn-row">
                 <a href="{% url 'create_teacher' %}" class="btn btn-custom">Add Teacher</a>
             </div>
@@ -121,10 +135,9 @@
             <div class="btn-row">
                 <a href="{% url 'create_student' %}" class="btn btn-custom">Add Student</a>
             </div>
-            <div class="btn-row">
-                <a href="{% url 'get_princi' %}" class="btn btn-custom">Principal</a>
-            </div>
+            
         {% endif %}
+        
         <div class="btn-row">
             <a href="{% url 'logout' %}" class="btn btn-custom btn-danger">Logout</a>
         </div>

@@ -9,14 +9,42 @@ from student import models as studentmodel
 from student.models import *
 from django.contrib.auth.forms import UserCreationForm
 from django.template.loader import render_to_string
+from functools import wraps
 
 
+def admin_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return render(request, 'teacher/error.html', {'message': 'You do not have permission to access this page.'})
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
 
+def group_required(group_name):
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            if not request.user.is_authenticated:
+                return render(request, 'teacher/error.html', {'message': 'You need to be logged in to access this page.'})
+            
+            if not request.user.groups.filter(name=group_name).exists():
+                return render(request, 'teacher/error.html', {'message': 'You do not have permission to access this page.'})
+            
+            return view_func(request, *args, **kwargs)
+        return _wrapped_view
+    return decorator
 
+@group_required('teacher')   
 @login_required
 def teacher_login(request):
     context = {}
     try:
+        
+        if request.user.is_superuser:
+            context.update({'admin': True})
+        else:
+            context.update({'teacher': True})
+        
         teacher = studentmodel.teacher.objects.get(user=request.user)
         
         charge = studentmodel.charge.objects.filter(teacher_id=teacher).first()
@@ -39,6 +67,7 @@ def teacher_login(request):
 
     return render(request, 'teacher/teacher.html', context)
 
+@group_required('teacher')
 @login_required
 def get_tutors(request):
     # Get the teacher instance associated with the logged-in user
@@ -67,6 +96,7 @@ def get_tutors(request):
     }
     return render(request, 'teacher/get_dept.html', context)
 
+@group_required('teacher')
 @login_required
 def add_event(request):
     teacher_instance = teacher.objects.filter(user=request.user).first()
@@ -83,6 +113,7 @@ def add_event(request):
 
     return render(request, 'teacher/add_event.html', {'form': form})
 
+@group_required('teacher')
 @login_required
 def get_charge(request):
     # Assuming the logged-in teacher is in charge of an event
@@ -98,7 +129,7 @@ def get_charge(request):
     }
     return render(request, 'teacher/get_charge.html', context)
 
-
+@group_required('teacher')
 @login_required
 def get_dept(request):
     # Get the teacher instance associated with the logged-in user
@@ -118,6 +149,7 @@ def get_dept(request):
     }
     return render(request, 'teacher/get_hod.html', context)
 
+@group_required('teacher')
 @login_required
 def get_princi(request):
     # Get the teacher instance associated with the logged-in user
@@ -137,7 +169,7 @@ def get_princi(request):
     return render(request, 'teacher/get_princi.html', context)
 
 
-
+@group_required('teacher')
 @login_required
 def tutor_accept(request):
     att_id = request.GET.get('att_id')
@@ -146,6 +178,7 @@ def tutor_accept(request):
     att.save()
     return redirect('get_tutors')
 
+@group_required('teacher')
 @login_required
 def princi_accept(request):
     att_id = request.GET.get('att_id')
@@ -153,6 +186,7 @@ def princi_accept(request):
     att.status_id = 'ap_by_princi'
     att.save()
     return redirect('get_princi')
+@group_required('teacher')
 @login_required
 def hod_accept(request):
     att_id = request.GET.get('att_id')
@@ -161,7 +195,7 @@ def hod_accept(request):
     att.save()
     return redirect('get_dept')
 
-
+@group_required('teacher')
 @login_required
 def teacher_accept(request):
     att_id = request.GET.get('att_id')
@@ -169,7 +203,7 @@ def teacher_accept(request):
     att.status_id = 'ap_by_teacher'
     att.save()
     return redirect('get_charge')
-
+@group_required('teacher')
 @login_required
 def teacher_reject(request):
     att_id = request.GET.get('att_id')
@@ -178,13 +212,13 @@ def teacher_reject(request):
     att.save()
     return redirect('get_charge')
 
-
+@group_required('teacher')
 @login_required
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-
+@group_required('teacher')
 @login_required
 def generate_report(request):
     att_id = request.GET.get('att_id')
@@ -207,8 +241,8 @@ def generate_report(request):
     response['Content-Disposition'] = f'attachment; filename="report_{attendance_record.id}.pdf"'
     return response
 
-
-
+@group_required('teacher')
+@admin_required
 @login_required
 def addteacher(request):
     if request.method == 'POST':
@@ -233,6 +267,8 @@ def addteacher(request):
         'teacher': True
     })
 
+@group_required('teacher')
+@admin_required
 @login_required
 def addstudent(request):
     if request.method == 'POST':
@@ -257,7 +293,7 @@ def addstudent(request):
         'student_form': student_form,
         'student': True
     })
-
+@admin_required
 @login_required
 def assign_teacher_position(request):
     if request.method == 'POST':
