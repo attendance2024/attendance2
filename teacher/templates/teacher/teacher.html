@@ -99,11 +99,6 @@
     {% endif %}
     
     <div class="container container-custom text-center">
-        {% if hod %}
-            <div class="btn-row">
-                <a href="{% url 'get_dept' %}" class="btn btn-custom">{{ hod.dept_id }}</a>
-            </div>
-        {% endif %}
         {% if charge %}
             <div class="btn-row">
                 <a href="{% url 'add_event' %}" class="btn btn-custom">Add Event</a>
@@ -112,15 +107,21 @@
                 <a href="{% url 'get_charge' %}" class="btn btn-custom">{{ charge.ex_id }}</a>
             </div>
         {% endif %}
+        {% if hod %}
+            <div class="btn-row">
+                <a href="{% url 'get_dept' %}" class="btn btn-custom">View Student Details in {{ hod.dept_id }}</a>
+            </div>
+        {% endif %}
+        
         {% if tutor %}
             <div class="btn-row">
-                <a href="{% url 'get_tutors' %}" class="btn btn-custom">{{ tutor.pgm_id }} SEM {{ tutor.sem }}</a>
+                <a href="{% url 'get_tutors' %}" class="btn btn-custom">View Student Details in SEM {{ tutor.sem }}</a>
             </div>
         {% endif %}
         {% if principal %}
             
             <div class="btn-row">
-                <a href="{% url 'get_princi' %}" class="btn btn-custom">Principal</a>
+                <a href="{% url 'get_princi' %}" class="btn btn-custom">View Student Details</a>
             </div>
             
             

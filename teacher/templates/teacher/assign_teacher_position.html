@@ -116,6 +116,7 @@
                         form.find('input[type="text"], input[type="email"], select, textarea').val('');
                         // Optionally, show a success message
                         alert('Form submitted successfully!');
+                        form[0].reset();
                     },
                     error: function(response) {
                         // Optionally, show an error message

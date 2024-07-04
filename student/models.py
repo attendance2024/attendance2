@@ -32,7 +32,7 @@ class student(models.Model):
     def __str__(self):
         return self.student_name
 
-    
+
     def clean(self):
         # Case-insensitive uniqueness check for reg_no
         if student.objects.filter(reg_no__iexact=self.reg_no).exclude(pk=self.pk).exists():
@@ -58,11 +58,6 @@ class event(models.Model):
     event_description = models.CharField(max_length=120, unique=True)
     def __str__(self):
         return self.event_description
-
-    def save(self, *args, **kwargs):
-        # Convert email to lowercase before saving
-        self.event_description = self.event_description.lower()
-        super(event, self).save(*args, **kwargs)
 
     
 class teacher(models.Model):
