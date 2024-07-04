@@ -47,7 +47,7 @@ def add_attendance(request):
                 hour=hour
             )
             attendance.save()
-        return redirect('success')
+        
     
     return render(request, 'student/add_attendance.html', context)
 
@@ -63,9 +63,7 @@ def view_attendance(request):
     stud = student.objects.filter(user=request.user).first()
     attendance_records = addattendance.objects.filter(student=stud)
     return render(request, 'student/view_attendance.html', {'attendance_records': attendance_records})
-@login_required()    
-def success(request):
-    return render(request,'student/success.html') 
+
   
 def aboutcollege(request):
     return render(request, 'student/about.html')

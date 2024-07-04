@@ -78,7 +78,7 @@
 <body>
     <div class="attendance-form">
         <h2>Add Attendance</h2>
-        <form action="{% url 'add_attendance' %}" method="post">
+        <form id="attendance-form" action="{% url 'add_attendance' %}" method="post">
             {% csrf_token %}
             <div class="form-group">
                 <label for="extracurricular">Extracurricular Activities:</label>
@@ -121,7 +121,28 @@
         </div>
     </div>
 
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Success</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Attendance submitted successfully!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function() {
             // Handle hover effect with jQuery
@@ -153,6 +174,25 @@
                     $('#event').empty();
                     $('#event').append('<option value="">Select Event</option>');
                 }
+            });
+
+            // Handle form submission
+            $('#attendance-form').on('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                var form = $(this);
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        $('#successModal').modal('show');
+                        form[0].reset();
+                    },
+                    error: function(response) {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
             });
         });
     </script>

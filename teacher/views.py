@@ -293,6 +293,7 @@ def addstudent(request):
         'student_form': student_form,
         'student': True
     })
+@group_required('teacher')
 @admin_required
 @login_required
 def assign_teacher_position(request):
