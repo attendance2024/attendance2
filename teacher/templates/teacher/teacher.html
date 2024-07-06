@@ -109,13 +109,13 @@
         {% endif %}
         {% if hod %}
             <div class="btn-row">
-                <a href="{% url 'get_dept' %}" class="btn btn-custom">View Student Details in {{ hod.dept_id }}</a>
+                <a href="{% url 'get_dept' %}" class="btn btn-custom">View Student Details</a>
             </div>
         {% endif %}
         
         {% if tutor %}
             <div class="btn-row">
-                <a href="{% url 'get_tutors' %}" class="btn btn-custom">View Student Details in SEM {{ tutor.sem }}</a>
+                <a href="{% url 'get_tutors' %}" class="btn btn-custom">View Student Details</a>
             </div>
         {% endif %}
         {% if principal %}
